@@ -108,49 +108,78 @@
     </div>
   </div>
 
-<script>
-function cerrarSesion() {
-  sessionStorage.removeItem('rolUsuario');
-  window.location.href = 'login.html';
-}
-
-function mostrarSeccion(id) {
-  document.querySelectorAll('.form-section').forEach(div => div.style.display = 'none');
-  document.getElementById(id).style.display = 'block';
-}
-
-async function fetchOpcionesYRender() {
-  const entidades = [
-    { endpoint: 'usuarios', id: 'profesorId', rol: 'profesor' },
-    { endpoint: 'usuarios', id: 'inspectorId', rol: 'inspector' },
-    { endpoint: 'usuarios', id: 'profeGuiaId', rol: 'profesor' },
-    { endpoint: 'cursos', id: 'cursoId' },
-    { endpoint: 'asignaturas', id: 'asignaturaId' },
-  ];
-
-  for (const ent of entidades) {
-    try {
-      const res = await fetch(`https://in-lib-ccl.supabase.co/rest/v1/${ent.endpoint}?select=id,nombre${ent.rol ? `&rol=eq.${ent.rol}` : ''}`, {
-        headers: {
-          'apikey': 'anon-key-publica-si-la-configuraste',
-          'Authorization': 'Bearer anon-key-publica-si-la-configuraste'
-        }
-      });
-      const data = await res.json();
-      const select = document.getElementById(ent.id);
-      data.forEach(item => {
-        const opt = document.createElement('option');
-        opt.value = item.id;
-        opt.textContent = item.nombre;
-        select.appendChild(opt);
-      });
-    } catch (e) {
-      console.error('Error al cargar', ent.endpoint, e);
+  <script>
+    function cerrarSesion() {
+      sessionStorage.removeItem('rolUsuario');
+      window.location.href = 'login.html';
     }
-  }
-}
-
-document.addEventListener('DOMContentLoaded', fetchOpcionesYRender);
-</script>
+    
+    function mostrarSeccion(id) {
+      document.querySelectorAll('.form-section').forEach(div => div.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+    }
+    
+    // ✅ Función para crear usuario real en backend
+    document.getElementById('formCrearUsuario').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const nombre = document.getElementById('nombreUsuario').value;
+      const correo = document.getElementById('correoUsuario').value;
+      const rol = document.getElementById('rolUsuario').value;
+      
+      try {
+        const response = await fetch('https://in-lib-ccl.vercel.app/api/crear-usuario', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nombre, correo, rol })
+        });
+    
+        const result = await response.json();
+    
+        if (response.ok) {
+          alert('✅ Usuario creado correctamente. Se enviará correo de bienvenida.');
+          this.reset();
+        } else {
+          alert('❌ Error al crear usuario: ' + (result.error || 'Error desconocido.'));
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('❌ Error inesperado.');
+      }
+    });
+    
+    async function fetchOpcionesYRender() {
+      const entidades = [
+        { endpoint: 'usuarios', id: 'profesorId', rol: 'profesor' },
+        { endpoint: 'usuarios', id: 'inspectorId', rol: 'inspector' },
+        { endpoint: 'usuarios', id: 'profeGuiaId', rol: 'profesor' },
+        { endpoint: 'cursos', id: 'cursoId' },
+        { endpoint: 'asignaturas', id: 'asignaturaId' },
+      ];
+    
+      for (const ent of entidades) {
+        try {
+          const res = await fetch(`https://in-lib-ccl.supabase.co/rest/v1/${ent.endpoint}?select=id,nombre${ent.rol ? `&rol=eq.${ent.rol}` : ''}`, {
+            headers: {
+              'apikey': 'anon-key-publica-si-la-configuraste',
+              'Authorization': 'Bearer anon-key-publica-si-la-configuraste'
+            }
+          });
+          const data = await res.json();
+          const select = document.getElementById(ent.id);
+          data.forEach(item => {
+            const opt = document.createElement('option');
+            opt.value = item.id;
+            opt.textContent = item.nombre;
+            select.appendChild(opt);
+          });
+        } catch (e) {
+          console.error('Error al cargar', ent.endpoint, e);
+        }
+      }
+    }
+    
+    document.addEventListener('DOMContentLoaded', fetchOpcionesYRender);
+    </script>    
 </body>
 </html>
