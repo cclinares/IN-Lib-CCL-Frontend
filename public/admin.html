@@ -7,7 +7,6 @@
   <style>
     body { background-color: #f8f9fa; }
     .logo { width: 60px; margin-right: 10px; }
-    .card-title { font-weight: bold; }
     .form-section { display: none; margin-bottom: 30px; }
     .toggle-btn { margin: 5px; }
   </style>
@@ -28,9 +27,9 @@
     <div class="text-center mb-4">
       <button class="btn btn-outline-primary toggle-btn" onclick="mostrarSeccion('crearUsuario')">👤 Crear Usuario</button>
       <button class="btn btn-outline-success toggle-btn" onclick="mostrarSeccion('crearCurso')">🏫 Crear Curso</button>
-      <button class="btn btn-outline-warning toggle-btn" onclick="mostrarSeccion('crearAsignatura')">📘 Crear Asignatura</button>
+      <button class="btn btn-outline-warning toggle-btn" onclick="mostrarSeccion('crearAsignatura')">📚 Crear Asignatura</button>
       <button class="btn btn-outline-info toggle-btn" onclick="mostrarSeccion('asignarProfesor')">👨‍🏫 Asignar Profesor</button>
-      <button class="btn btn-outline-secondary toggle-btn" onclick="mostrarSeccion('asignarInspector')">🧍 Asignar Inspector</button>
+      <button class="btn btn-outline-secondary toggle-btn" onclick="mostrarSeccion('asignarInspector')">🧙 Asignar Inspector</button>
     </div>
 
     <div id="crearUsuario" class="card border-primary form-section">
@@ -67,7 +66,7 @@
 
     <div id="crearAsignatura" class="card border-warning form-section">
       <div class="card-body">
-        <h5 class="card-title">📘 Crear Asignatura</h5>
+        <h5 class="card-title">📚 Crear Asignatura</h5>
         <form id="formCrearAsignatura">
           <input type="text" class="form-control mb-2" id="nombreAsignatura" placeholder="Nombre de asignatura" required>
           <input type="text" class="form-control mb-2" id="nivelAsignatura" placeholder="Nivel (Ej: Básico, Medio)" required>
@@ -96,7 +95,7 @@
 
     <div id="asignarInspector" class="card border-secondary form-section">
       <div class="card-body">
-        <h5 class="card-title">🧍 Asignar Inspector a Nivel</h5>
+        <h5 class="card-title">🧙 Asignar Inspector a Nivel</h5>
         <form id="formAsignarInspector">
           <input type="text" class="form-control mb-2" id="nivelInspector" placeholder="Nivel (Ej: Prekinder, Básico, Medio)" required>
           <select class="form-select mb-2" id="inspectorId" required>
@@ -108,78 +107,76 @@
     </div>
   </div>
 
-  <script>
-    function cerrarSesion() {
-      sessionStorage.removeItem('rolUsuario');
-      window.location.href = 'login.html';
+<script>
+  function cerrarSesion() {
+    sessionStorage.removeItem('rolUsuario');
+    window.location.href = 'login.html';
+  }
+
+  function mostrarSeccion(id) {
+    document.querySelectorAll('.form-section').forEach(div => div.style.display = 'none');
+    document.getElementById(id).style.display = 'block';
+  }
+
+  document.getElementById('formCrearUsuario').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const nombre = document.getElementById('nombreUsuario').value;
+    const correo = document.getElementById('correoUsuario').value;
+    const rol = document.getElementById('rolUsuario').value;
+
+    try {
+      const response = await fetch('https://in-lib-ccl.vercel.app/api/crear-usuario', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre, correo, rol })
+      });
+      const result = await response.json();
+      if (response.ok) {
+        alert('✅ Usuario creado correctamente. Se enviará correo de bienvenida.');
+        this.reset();
+      } else {
+        alert('❌ Error al crear usuario: ' + (result.error || 'Error desconocido.'));
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('❌ Error inesperado.');
     }
-    
-    function mostrarSeccion(id) {
-      document.querySelectorAll('.form-section').forEach(div => div.style.display = 'none');
-      document.getElementById(id).style.display = 'block';
-    }
-    
-    // ✅ Función para crear usuario real en backend
-    document.getElementById('formCrearUsuario').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      
-      const nombre = document.getElementById('nombreUsuario').value;
-      const correo = document.getElementById('correoUsuario').value;
-      const rol = document.getElementById('rolUsuario').value;
-      
+  });
+
+  async function fetchOpcionesYRender() {
+    const base = 'https://djftpnxuwujyhxixedwj.supabase.co/rest/v1';
+    const headers = {
+      'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqZnRwbnh1d3VqeWh4aXhlZHdqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM1MTI5NjAsImV4cCI6MjA1OTA4ODk2MH0.lrjGhYn6O_i4uoIhTbkfKPUehERg_pYA1H2DRHtHVO8',
+      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqZnRwbnh1d3VqeWh4aXhlZHdqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM1MTI5NjAsImV4cCI6MjA1OTA4ODk2MH0.lrjGhYn6O_i4uoIhTbkfKPUehERg_pYA1H2DRHtHVO8'
+    };
+
+    const entidades = [
+      { endpoint: 'usuarios', id: 'profesorId', rol: 'profesor' },
+      { endpoint: 'usuarios', id: 'inspectorId', rol: 'inspector' },
+      { endpoint: 'usuarios', id: 'profeGuiaId', rol: 'profesor' },
+      { endpoint: 'cursos', id: 'cursoId' },
+      { endpoint: 'asignaturas', id: 'asignaturaId' }
+    ];
+
+    for (const ent of entidades) {
       try {
-        const response = await fetch('https://in-lib-ccl.vercel.app/api/crear-usuario', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ nombre, correo, rol })
+        const url = `${base}/${ent.endpoint}?select=id,nombre${ent.rol ? `&rol=eq.${ent.rol}` : ''}`;
+        const res = await fetch(url, { headers });
+        const data = await res.json();
+        const select = document.getElementById(ent.id);
+        data.forEach(item => {
+          const opt = document.createElement('option');
+          opt.value = item.id;
+          opt.textContent = item.nombre;
+          select.appendChild(opt);
         });
-    
-        const result = await response.json();
-    
-        if (response.ok) {
-          alert('✅ Usuario creado correctamente. Se enviará correo de bienvenida.');
-          this.reset();
-        } else {
-          alert('❌ Error al crear usuario: ' + (result.error || 'Error desconocido.'));
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        alert('❌ Error inesperado.');
-      }
-    });
-    
-    async function fetchOpcionesYRender() {
-      const entidades = [
-        { endpoint: 'usuarios', id: 'profesorId', rol: 'profesor' },
-        { endpoint: 'usuarios', id: 'inspectorId', rol: 'inspector' },
-        { endpoint: 'usuarios', id: 'profeGuiaId', rol: 'profesor' },
-        { endpoint: 'cursos', id: 'cursoId' },
-        { endpoint: 'asignaturas', id: 'asignaturaId' },
-      ];
-    
-      for (const ent of entidades) {
-        try {
-          const res = await fetch(`https://in-lib-ccl.supabase.co/rest/v1/${ent.endpoint}?select=id,nombre${ent.rol ? `&rol=eq.${ent.rol}` : ''}`, {
-            headers: {
-              'apikey': 'anon-key-publica-si-la-configuraste',
-              'Authorization': 'Bearer anon-key-publica-si-la-configuraste'
-            }
-          });
-          const data = await res.json();
-          const select = document.getElementById(ent.id);
-          data.forEach(item => {
-            const opt = document.createElement('option');
-            opt.value = item.id;
-            opt.textContent = item.nombre;
-            select.appendChild(opt);
-          });
-        } catch (e) {
-          console.error('Error al cargar', ent.endpoint, e);
-        }
+      } catch (e) {
+        console.error('Error al cargar', ent.endpoint, e);
       }
     }
-    
-    document.addEventListener('DOMContentLoaded', fetchOpcionesYRender);
-    </script>    
+  }
+
+  document.addEventListener('DOMContentLoaded', fetchOpcionesYRender);
+</script>
 </body>
 </html>
