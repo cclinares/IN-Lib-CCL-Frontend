@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel del Profesor - IN-Lib</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+      <span class="navbar-brand mb-0 h1">👨‍🏫 Panel del Profesor - IN-Lib</span>
+      <button class="btn btn-outline-light" onclick="cerrarSesion()">Cerrar sesión</button>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="text-center mb-4">
+      <h2>Bienvenido(a) Profesor</h2>
+      <p class="text-muted">Aquí podrá gestionar clases, libros, evaluaciones y asistencia</p>
+    </div>
+
+    <!-- Panel de acciones del profesor -->
+    <div class="row g-3 justify-content-center">
+      <div class="col-md-4">
+        <div class="card border-primary">
+          <div class="card-body text-center">
+            <h5 class="card-title">📅 Clases del Día</h5>
+            <p class="card-text">Ver tus asignaturas programadas para hoy.</p>
+            <a href="#" class="btn btn-primary w-100">Ir</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card border-success">
+          <div class="card-body text-center">
+            <h5 class="card-title">📘 Libros de Cursos</h5>
+            <p class="card-text">Accede a tus libros de clases digitales.</p>
+            <a href="#" class="btn btn-success w-100">Ver Cursos</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card border-warning">
+          <div class="card-body text-center">
+            <h5 class="card-title">📝 Evaluaciones</h5>
+            <p class="card-text">Registra notas y crea evaluaciones.</p>
+            <a href="#" class="btn btn-warning w-100">Evaluar</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function cerrarSesion() {
+      sessionStorage.removeItem('rolUsuario');
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>

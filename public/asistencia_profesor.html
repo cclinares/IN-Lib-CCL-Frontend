@@ -1,0 +1,46 @@
+<!-- public/asistencia_profesor.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Asistencia - IN-Lib</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="src/css/estilos.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container">
+    <a class="navbar-brand" href="#">IN-Lib Web</a>
+    <button class="btn btn-light ms-auto" onclick="cerrarSesion()">Cerrar sesión</button>
+  </div>
+</nav>
+
+<div class="container mt-5">
+  <h1 class="text-center mb-4">Registrar Asistencia</h1>
+
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <select id="cursoSelect" class="form-select">
+        <option value="">Seleccione un curso</option>
+      </select>
+    </div>
+    <div class="col-md-6">
+      <select id="mesSelect" class="form-select">
+        <option value="">Seleccione un mes</option>
+        <!-- Los meses se cargarán automáticamente -->
+      </select>
+    </div>
+  </div>
+
+  <div id="tablaAsistenciaContainer" class="table-responsive"></div>
+
+  <div class="text-center mt-4">
+    <button class="btn btn-success" onclick="guardarAsistencia()">Guardar Asistencia</button>
+  </div>
+</div>
+
+<script src="src/js/asistencia.js"></script>
+</body>
+</html>

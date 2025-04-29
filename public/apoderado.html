@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel del Apoderado - IN-Lib</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+      <span class="navbar-brand mb-0 h1">👨‍👩‍👧‍👦 Panel del Apoderado - IN-Lib</span>
+      <button class="btn btn-outline-light" onclick="cerrarSesion()">Cerrar sesión</button>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="text-center mb-4">
+      <h2>Bienvenido(a) Apoderado</h2>
+      <p class="text-muted">Aquí podrá revisar las notas, asistencia y anotaciones de su(s) hijo(s).</p>
+    </div>
+
+    <!-- Panel de acciones del apoderado -->
+    <div class="row g-3 justify-content-center">
+      <div class="col-md-4">
+        <div class="card border-success">
+          <div class="card-body text-center">
+            <h5 class="card-title">📊 Notas</h5>
+            <p class="card-text">Revisa el rendimiento académico.</p>
+            <a href="#" class="btn btn-success w-100">Ver Notas</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card border-primary">
+          <div class="card-body text-center">
+            <h5 class="card-title">📋 Asistencia</h5>
+            <p class="card-text">Consulta los días asistidos y ausencias.</p>
+            <a href="#" class="btn btn-primary w-100">Ver Asistencia</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card border-danger">
+          <div class="card-body text-center">
+            <h5 class="card-title">🗒️ Anotaciones</h5>
+            <p class="card-text">Visualiza observaciones de convivencia escolar.</p>
+            <a href="#" class="btn btn-danger w-100">Ver Anotaciones</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function cerrarSesion() {
+      sessionStorage.removeItem('rolUsuario');
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>

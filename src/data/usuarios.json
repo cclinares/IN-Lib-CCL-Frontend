@@ -1,0 +1,25 @@
+[
+  {
+    "email": "admin@colegio.cl",
+    "password": "admin123",
+    "rol": "admin"
+  },
+  {
+    "email": "profesor1@colegio.cl",
+    "password": "profesor123",
+    "rol": "profesor",
+    "cursos": ["5A", "6B"]
+  },
+  {
+    "email": "inspector1@colegio.cl",
+    "password": "inspector123",
+    "rol": "inspector",
+    "cursos": ["5A", "7B"]
+  },
+  {
+    "email": "apoderado1@colegio.cl",
+    "password": "apoderado123",
+    "rol": "apoderado",
+    "estudiantes": ["Juan Pérez"]
+  }
+]

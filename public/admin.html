@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel del Administrador - IN-Lib</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background-color: #f8f9fa; }
+    .logo { width: 60px; margin-right: 10px; }
+    .card-title { font-weight: bold; }
+    .form-section { display: none; margin-bottom: 30px; }
+    .toggle-btn { margin: 5px; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-dark bg-dark px-4">
+    <div class="d-flex align-items-center">
+      <img src="https://i.imgur.com/nkYL2HQ.png" class="logo" alt="Logo Colegio">
+      <span class="navbar-brand mb-0 h1">IN-Lib - Panel del Administrador</span>
+    </div>
+    <button class="btn btn-outline-light" onclick="cerrarSesion()">Cerrar sesión</button>
+  </nav>
+
+  <div class="container py-4">
+    <h3 class="text-center mb-3">Bienvenido a IN-Lib</h3>
+    <p class="text-center text-muted mb-4">By Prof Iván Núñez Cornejo - InTek Spa ™</p>
+
+    <div class="text-center mb-4">
+      <button class="btn btn-outline-primary toggle-btn" onclick="mostrarSeccion('crearUsuario')">👤 Crear Usuario</button>
+      <button class="btn btn-outline-success toggle-btn" onclick="mostrarSeccion('crearCurso')">🏫 Crear Curso</button>
+      <button class="btn btn-outline-warning toggle-btn" onclick="mostrarSeccion('crearAsignatura')">📘 Crear Asignatura</button>
+      <button class="btn btn-outline-info toggle-btn" onclick="mostrarSeccion('asignarProfesor')">👨‍🏫 Asignar Profesor</button>
+      <button class="btn btn-outline-secondary toggle-btn" onclick="mostrarSeccion('asignarInspector')">🧍 Asignar Inspector</button>
+    </div>
+
+    <div id="crearUsuario" class="card border-primary form-section">
+      <div class="card-body">
+        <h5 class="card-title">👤 Crear Usuario</h5>
+        <form id="formCrearUsuario">
+          <input type="text" class="form-control mb-2" id="nombreUsuario" placeholder="Nombre completo" required>
+          <input type="email" class="form-control mb-2" id="correoUsuario" placeholder="Correo" required>
+          <select class="form-select mb-2" id="rolUsuario" required>
+            <option value="">Seleccionar rol</option>
+            <option value="administrador">Administrador</option>
+            <option value="profesor">Profesor</option>
+            <option value="inspector">Inspector</option>
+            <option value="apoderado">Apoderado</option>
+          </select>
+          <button type="submit" class="btn btn-primary w-100">Crear</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="crearCurso" class="card border-success form-section">
+      <div class="card-body">
+        <h5 class="card-title">🏫 Crear Curso</h5>
+        <form id="formCrearCurso">
+          <input type="text" class="form-control mb-2" id="nombreCurso" placeholder="Nombre del curso" required>
+          <input type="text" class="form-control mb-2" id="nivelCurso" placeholder="Nivel (Ej: Básico, Medio)" required>
+          <select class="form-select mb-2" id="profeGuiaId">
+            <option value="">Seleccionar profesor guía (opcional)</option>
+          </select>
+          <button type="submit" class="btn btn-success w-100">Crear</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="crearAsignatura" class="card border-warning form-section">
+      <div class="card-body">
+        <h5 class="card-title">📘 Crear Asignatura</h5>
+        <form id="formCrearAsignatura">
+          <input type="text" class="form-control mb-2" id="nombreAsignatura" placeholder="Nombre de asignatura" required>
+          <input type="text" class="form-control mb-2" id="nivelAsignatura" placeholder="Nivel (Ej: Básico, Medio)" required>
+          <button type="submit" class="btn btn-warning w-100">Crear</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="asignarProfesor" class="card border-info form-section">
+      <div class="card-body">
+        <h5 class="card-title">👨‍🏫 Asignar Profesor a Asignatura</h5>
+        <form id="formAsignarProfesor">
+          <select class="form-select mb-2" id="cursoId" required>
+            <option value="">Seleccionar curso</option>
+          </select>
+          <select class="form-select mb-2" id="asignaturaId" required>
+            <option value="">Seleccionar asignatura</option>
+          </select>
+          <select class="form-select mb-2" id="profesorId" required>
+            <option value="">Seleccionar profesor</option>
+          </select>
+          <button type="submit" class="btn btn-info w-100">Asignar</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="asignarInspector" class="card border-secondary form-section">
+      <div class="card-body">
+        <h5 class="card-title">🧍 Asignar Inspector a Nivel</h5>
+        <form id="formAsignarInspector">
+          <input type="text" class="form-control mb-2" id="nivelInspector" placeholder="Nivel (Ej: Prekinder, Básico, Medio)" required>
+          <select class="form-select mb-2" id="inspectorId" required>
+            <option value="">Seleccionar inspector</option>
+          </select>
+          <button type="submit" class="btn btn-secondary w-100">Asignar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+<script>
+function cerrarSesion() {
+  sessionStorage.removeItem('rolUsuario');
+  window.location.href = 'login.html';
+}
+
+function mostrarSeccion(id) {
+  document.querySelectorAll('.form-section').forEach(div => div.style.display = 'none');
+  document.getElementById(id).style.display = 'block';
+}
+
+async function fetchOpcionesYRender() {
+  const entidades = [
+    { endpoint: 'usuarios', id: 'profesorId', rol: 'profesor' },
+    { endpoint: 'usuarios', id: 'inspectorId', rol: 'inspector' },
+    { endpoint: 'usuarios', id: 'profeGuiaId', rol: 'profesor' },
+    { endpoint: 'cursos', id: 'cursoId' },
+    { endpoint: 'asignaturas', id: 'asignaturaId' },
+  ];
+
+  for (const ent of entidades) {
+    try {
+      const res = await fetch(`https://in-lib-ccl.supabase.co/rest/v1/${ent.endpoint}?select=id,nombre${ent.rol ? `&rol=eq.${ent.rol}` : ''}`, {
+        headers: {
+          'apikey': 'anon-key-publica-si-la-configuraste',
+          'Authorization': 'Bearer anon-key-publica-si-la-configuraste'
+        }
+      });
+      const data = await res.json();
+      const select = document.getElementById(ent.id);
+      data.forEach(item => {
+        const opt = document.createElement('option');
+        opt.value = item.id;
+        opt.textContent = item.nombre;
+        select.appendChild(opt);
+      });
+    } catch (e) {
+      console.error('Error al cargar', ent.endpoint, e);
+    }
+  }
+}
+
+document.addEventListener('DOMContentLoaded', fetchOpcionesYRender);
+</script>
+</body>
+</html>

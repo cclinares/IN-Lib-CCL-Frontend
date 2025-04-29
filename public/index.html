@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IN-Lib - Panel Principal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <img src="https://i.imgur.com/nkYL2HQ.png" alt="Logo Colegio" width="40" height="40" class="me-2">
+        IN-Lib
+      </a>
+      <button class="btn btn-outline-light ms-auto" onclick="cerrarSesion()">Cerrar sesión</button>
+    </div>
+  </nav>
+
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">Bienvenido a IN-Lib</h1>
+    <p class="text-center">Seleccione una función según su rol:</p>
+
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+      <div class="col" id="seccionNotas" style="display:none;">
+        <div class="card h-100 border-success">
+          <div class="card-body text-center">
+            <h5 class="card-title">📚 Registro de Notas</h5>
+            <p class="card-text">Ingrese y exporte las calificaciones por curso y asignatura.</p>
+            <a href="notas_profesor.html" class="btn btn-success">Ir a Notas</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col" id="seccionAsistenciaInspector" style="display:none;">
+        <div class="card h-100 border-primary">
+          <div class="card-body text-center">
+            <h5 class="card-title">📝 Asistencia del Inspector</h5>
+            <p class="card-text">Registrar asistencia mensual completa por curso.</p>
+            <a href="asistencia_inspector.html" class="btn btn-primary">Ir a Asistencia Inspector</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col" id="seccionAsistenciaProfesor" style="display:none;">
+        <div class="card h-100 border-info">
+          <div class="card-body text-center">
+            <h5 class="card-title">📅 Asistencia del Profesor</h5>
+            <p class="card-text">Marcar asistencia diaria por clase y asignatura.</p>
+            <a href="asistencia_profesor.html" class="btn btn-info">Ir a Asistencia Profesor</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col" id="seccionAnotaciones" style="display:none;">
+        <div class="card h-100 border-warning">
+          <div class="card-body text-center">
+            <h5 class="card-title">📖 Anotaciones</h5>
+            <p class="card-text">Registrar y exportar anotaciones de estudiantes.</p>
+            <a href="anotaciones.html" class="btn btn-warning">Ir a Anotaciones</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const rol = sessionStorage.getItem('rolUsuario');
+
+      if (!rol) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      if (rol === 'profesor') {
+        document.getElementById('seccionNotas').style.display = 'block';
+        document.getElementById('seccionAsistenciaProfesor').style.display = 'block';
+        document.getElementById('seccionAnotaciones').style.display = 'block';
+      } else if (rol === 'inspector') {
+        document.getElementById('seccionAsistenciaInspector').style.display = 'block';
+        document.getElementById('seccionAnotaciones').style.display = 'block';
+      } else if (rol === 'admin') {
+        document.querySelectorAll('.col').forEach(div => div.style.display = 'block');
+      }
+    });
+
+    function cerrarSesion() {
+      sessionStorage.removeItem('rolUsuario');
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!-- public/anotaciones.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Anotaciones - IN-Lib</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="src/css/estilos.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-warning">
+  <div class="container">
+    <a class="navbar-brand" href="#">IN-Lib Web</a>
+    <button class="btn btn-light ms-auto" onclick="cerrarSesion()">Cerrar sesión</button>
+  </div>
+</nav>
+
+<div class="container mt-5">
+  <h1 class="text-center mb-4">Registrar Anotaciones</h1>
+
+  <div class="row mb-4">
+    <div class="col-md-4 mb-3">
+      <select id="cursoSelect" class="form-select">
+        <option value="">Seleccione un curso</option>
+      </select>
+    </div>
+    <div class="col-md-4 mb-3">
+      <select id="estudianteSelect" class="form-select">
+        <option value="">Seleccione un estudiante</option>
+      </select>
+    </div>
+    <div class="col-md-4 mb-3">
+      <input type="date" id="fechaAnotacion" class="form-control">
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-md-4 mb-3">
+      <select id="tipoSelect" class="form-select">
+        <option value="">Tipo de anotación</option>
+        <option value="Positiva">Positiva</option>
+        <option value="Negativa">Negativa</option>
+        <option value="Informativa">Informativa</option>
+      </select>
+    </div>
+    <div class="col-md-8 mb-3">
+      <input type="text" id="detalleAnotacion" class="form-control" placeholder="Ingrese la observación">
+    </div>
+  </div>
+
+  <div class="text-center mb-4">
+    <button class="btn btn-success" onclick="guardarAnotacion()">Guardar Anotación</button>
+    <button class="btn btn-primary ms-2" onclick="exportarAnotaciones()">Exportar Anotaciones</button>
+  </div>
+
+  <div id="tablaAnotacionesContainer" class="table-responsive"></div>
+</div>
+
+<script src="src/js/anotaciones.js"></script>
+</body>
+</html>

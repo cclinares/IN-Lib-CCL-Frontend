@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Inspector - IN-Lib</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="src/css/estilos.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-warning">
+  <div class="container">
+    <a class="navbar-brand" href="#">IN-Lib Web</a>
+    <button class="btn btn-light ms-auto" onclick="cerrarSesion()">Cerrar sesión</button>
+  </div>
+</nav>
+
+<div class="container mt-5 text-center">
+  <h1 class="mb-4">Bienvenido, Inspector</h1>
+
+  <div id="cursosInspector" class="row g-4">
+    <!-- Cursos asignados dinámicamente -->
+  </div>
+</div>
+
+<script>
+// Verificar sesión
+const usuario = JSON.parse(sessionStorage.getItem('usuario'));
+if (!usuario || usuario.rol !== 'inspector') {
+  window.location.href = 'index.html';
+}
+
+function cerrarSesion() {
+  sessionStorage.removeItem('usuario');
+  window.location.href = 'index.html';
+}
+
+// Mostrar cursos asignados
+function mostrarCursos() {
+  const container = document.getElementById('cursosInspector');
+
+  if (usuario.cursos && usuario.cursos.length > 0) {
+    usuario.cursos.forEach(curso => {
+      const div = document.createElement('div');
+      div.className = 'col-md-4';
+
+      div.innerHTML = `
+        <div class="card shadow p-4">
+          <h4>Curso: ${curso}</h4>
+          <button class="btn btn-primary w-100 mb-2" onclick="verAsistencia('${curso}')">Asistencia</button>
+          <button class="btn btn-info w-100" onclick="verAnotaciones('${curso}')">Anotaciones</button>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+  } else {
+    container.innerHTML = '<p>No tiene cursos asignados.</p>';
+  }
+}
+
+function verAsistencia(curso) {
+  alert(`Accediendo a Asistencia del curso ${curso} 🚀`);
+}
+
+function verAnotaciones(curso) {
+  alert(`Accediendo a Anotaciones del curso ${curso} 🚀`);
+}
+
+mostrarCursos();
+</script>
+
+</body>
+</html>
